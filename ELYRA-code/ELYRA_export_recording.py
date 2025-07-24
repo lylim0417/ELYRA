@@ -3,7 +3,7 @@ import subprocess
 from datetime import datetime, timedelta
 
 # Constants
-OUTPUT_BASE_DIR = "/home/lylim/AIoTCam/Output"
+OUTPUT_BASE_DIR = "/home/ELYRA/Output"
 TODAY_DIR_NAME = datetime.now().strftime('%Y-%m-%d')
 TODAY_DIR_PATH = os.path.join(OUTPUT_BASE_DIR, TODAY_DIR_NAME)
 NFS_MOUNT_POINT = "/mnt/nfs/recordings"

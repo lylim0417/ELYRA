@@ -12,16 +12,16 @@ import numpy as np
 import psutil
 
 
-class AIoTCam:
+class ELYRA:
     def __init__(self):
         # Initialize the device (GPU if available, otherwise CPU)
         self.device = self.assign_device()
 
         # Load YOLOv11 Pose model with ByteTrack support
-        self.pose_model = self.load_yolo_model('/home/lylim/AIoTCam/Yolo-Weights/yolo11n-pose_ncnn_model')  # REPLACEMENT for person detection
+        self.pose_model = self.load_yolo_model('/home/ELYRA/ELYRA-model/Default_Person_Pose_Estimation-YOLO11n/yolo11n-pose_ncnn_model')  # REPLACEMENT for person pose estimation
 
         # Load your custom detection model for compliance items
-        self.custom_model = self.load_yolo_model('/home/lylim/AIoTCam/model-5000/5000-11s/weights/best_ncnn_model')
+        self.custom_model = self.load_yolo_model('/home/ELYRA/ELYRA-model/Custom_ALAPPE_Detection-YOLO11s/best_ncnn_model')    # REPLACEMENT for ALA PPE detection
 
         # Class names for your custom model
         self.class_name = ['Compliance-Shirt', 'Compliance-Pants', 'Compliance-Shoes',
@@ -34,15 +34,15 @@ class AIoTCam:
         self.capture = self.open_cam()
 
         # Frame size setup
-        self.frame_size = (int(get_monitors()[0].width / 2), get_monitors()[0].height)
+        self.frame_size = (get_monitors()[0].width, get_monitors()[0].height)
         self.fps = 0
         self.frame_count = 1
         self.skip_number = 10
 
         # Enable/disable video recording
         self.record = True
-        self.main_recording_path = '/home/lylim/AIoTCam/Output'
-        self.main_logging_path = '/home/lylim/AIoTCam/Log'
+        self.main_recording_path = '/home/ELYRA/Output'
+        self.main_logging_path = '/home/ELYRA/Log'
 
         # Initialize tracking & recording helpers
         self.output = {}
@@ -890,4 +890,4 @@ class AIoTCam:
 
 
 if __name__ == '__main__':
-    AIoTCam().main()
+    ELYRA().main()
