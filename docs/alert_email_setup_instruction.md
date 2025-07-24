@@ -7,7 +7,7 @@ This section explains how to set up the **email alert system** using **SMTP** an
 
 1. **Ensure the Email Alert Script is in Place**
 
-   First, make sure you have the email alert script [ELYRA_alert_email.py](ELYRA-code/ELYRA_alert_email.py) ready and placed on your **server** machine. This script will be responsible for sending email notifications when PPE violations are detected.
+   First, make sure you have the email alert script [ELYRA_alert_email.py](../ELYRA-code/ELYRA_alert_email.py) ready and placed on your **server** machine. This script will be responsible for sending email notifications when PPE violations are detected.
 
 2. **Create a Log File for Cron Job**
 
