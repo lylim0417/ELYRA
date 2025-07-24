@@ -1,0 +1,7 @@
+ultralytics         # For YOLO11 and other YOLO models
+opencv-python       # For video processing with OpenCV
+screeninfo          # For retrieving monitor information
+torch               # For running the YOLO model, support for GPU/CPU
+psutil              # For system monitoring (CPU, memory, etc.)
+pandas              # For handling data frames
+numpy               # For numerical operations
