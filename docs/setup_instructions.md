@@ -35,7 +35,7 @@ This section explains how to set up **NFS (Network File System)** for file shari
 
    Add the following line to specify the directory to share and who can access it:
    ```
-   /mnt/nfs/recordings 192.168.1.15(rw,async,all_squash,insecure,no_subtree_check)
+   /mnt/nfs/recordings {client-ip-address}(rw,async,all_squash,insecure,no_subtree_check)
    ```
    **Explanation of options**:
    - `rw`: Allows read-write access.
@@ -66,10 +66,8 @@ This section explains how to set up **NFS (Network File System)** for file shari
 
    Mount the shared NFS directory from the server to the Raspberry Pi:
    ```bash
-   sudo mount -t nfs4 192.168.1.20:/mnt/nfs/recordings /mnt/nfs/recordings
+   sudo mount -t nfs4 {server-ip-address}:/mnt/nfs/recordings /mnt/nfs/recordings
    ```
-
-   Replace `192.168.1.20` with the IP address of your NFS server.
 
 3. **Automatically Mount NFS Share at Boot**
 
@@ -80,7 +78,7 @@ This section explains how to set up **NFS (Network File System)** for file shari
 
    Add the following line:
    ```
-   192.168.1.20:/mnt/nfs/recordings /mnt/nfs_recordings nfs4 rw,nosuid,nodev,noexec,_netdev 0 0
+   {server-ip-address}:/mnt/nfs/recordings /mnt/nfs_recordings nfs4 rw,nosuid,nodev,noexec,_netdev 0 0
    ```
 
 4. **Verify NFS Mount**
@@ -92,7 +90,7 @@ This section explains how to set up **NFS (Network File System)** for file shari
 
    The output should show the NFS mount, similar to:
    ```
-   192.168.1.20:/mnt/nfs/recordings   25G  15G   8.9G  63% /mnt/nfs/recordings
+   {server-ip-address}:/mnt/nfs/recordings   25G  15G   8.9G  63% /mnt/nfs/recordings
    ```
 
 ---
@@ -107,14 +105,14 @@ To automate the process of managing video files, you will write a Python script 
 
 ### 1. **Write Python Script to Automate File Upload**
 
-Create a Python script `RaspiMountToServer.py` to automate file management between the Raspberry Pi and the NFS server.
+Create a Python script `ELYRA-code/ELYRA_export_recording.py` to automate file management between the Raspberry Pi and the NFS server.
 
 ### 2. **Create a Log File**
 
 Create a log file to capture the output or errors of the Python script:
 ```bash
-touch /home/lylim/AIoTCam/nfs_mount_logfile.log
-sudo chmod 755 /home/lylim/AIoTCam/nfs_mount_logfile.log
+touch /home/ELYRA-code/nfs_mount_logfile.log
+sudo chmod 755 /home/ELYRA-code/nfs_mount_logfile.log
 ```
 
 ### 3. **Set Up a Cron Job to Run the Script Every 5 Minutes**
@@ -126,7 +124,7 @@ crontab -e
 
 Add the following line to schedule the script:
 ```bash
-*/5 * * * * /usr/bin/python3 /home/lylim/AIoTCam/RaspiMountToServer.py >> /home/lylim/AIoTCam/nfs_mount_logfile.log 2>&1
+*/5 * * * * /usr/bin/python3 /home/ELYRA-code/ELYRA_export_recording.py >> /home/ELYRA-code/nfs_mount_logfile.log 2>&1
 ```
 
 ### 4. **Configure Log Rotation**
