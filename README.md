@@ -2,11 +2,11 @@
 
 ## Overview
 
-**ELYRA** is a real-time Personal Protective Equipment (PPE) compliance monitoring system designed for laboratories and low-risk environments. It uses **AI** and **computer vision** to automatically detect whether employees are wearing the required protective gear, such as sleeved shirts, long pants, and closed-toe shoes.
+**ELYRA** is a real-time Personal Protective Equipment (PPE) compliance monitoring system designed for Appropriate Laboratory Attire (ALA PPE) in laboratories and low-risk environments. It uses **AI** and **computer vision** to automatically detect whether employees are wearing the required protective gear, such as sleeved shirts, long pants, and closed-toe shoes.
 
 The system runs on a **Raspberry Pi 5** and uses the **YOLO11** object detection model, optimized with **NCNN** for efficient performance on edge devices. It provides real-time compliance feedback and sends **email alerts** when non-compliance is detected.
 
-Additionally, **Region of Interest (ROI) segmentation** is used to focus the model’s detection on specific areas of the body, improving detection accuracy and speed, especially in complex environments.
+Additionally, **Region of Interest (ROI) segmentation** is used to focus the modelâ€™s detection on specific areas of the body, improving detection accuracy and speed, especially in complex environments.
 
 ## Features
 
