@@ -18,16 +18,16 @@ Additionally, **Region of Interest (ROI) segmentation** is used to focus the mod
 
 ## Components
 
-- 1. **`ELYRA_monitor_ALAPPE.py`**: Monitors PPE compliance using a connected camera and runs AI inference for object detection, utilizing **ROI segmentation** for improved accuracy and **NCNN** optimization for efficient real-time processing on the Raspberry Pi.
-- 2. **`ELYRA_export_recording.py`**: Exports recorded compliance data for analysis, utilizing **NFS** for centralized storage and easy access to the logged data across multiple devices.
-- 3. **`ELYRA_alert_email.py`**: Sends email alerts when PPE violations are detected, using **SMTP** for email delivery and **MIME** for formatting the email content with attachments.
+- **`ELYRA_monitor_ALAPPE.py`**: Monitors PPE compliance using a connected camera and runs AI inference for object detection, utilizing **ROI segmentation** for improved accuracy and **NCNN** optimization for efficient real-time processing on the Raspberry Pi.
+- **`ELYRA_export_recording.py`**: Exports recorded compliance data for analysis, utilizing **NFS** for centralized storage and easy access to the logged data across multiple devices.
+- **`ELYRA_alert_email.py`**: Sends email alerts when PPE violations are detected, using **SMTP** for email delivery and **MIME** for formatting the email content with attachments.
 
 ## Setup Instructions
 
 For detailed instructions on setting up the following components, please refer to the corresponding setup instructions:
-- [Monitor ALA PPE setup](docs/monitor_ALAPPE_setup_instructions.md)
-- [Export Recording setup](docs/export_recording_setup_instruction.md)
-- [Alert Email setup](docs/alert_email_setup_instruction.md)
+- 🎥 [Monitor ALA PPE setup](docs/monitor_ALAPPE_setup_instructions.md)
+- 💾 [Export Recording setup](docs/export_recording_setup_instruction.md)
+- 📧 [Alert Email setup](docs/alert_email_setup_instruction.md)
 
 ## Acknowledgments
 
