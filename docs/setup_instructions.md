@@ -1,7 +1,7 @@
 
-# NFS Setup Instructions for ELYRA System
+# Export Recording Setup Instructions for ELYRA System
 
-This section explains how to set up **NFS (Network File System)** for file sharing between the Raspberry Pi (client) and the server.
+This section explains how to set up **NFS (Network File System)** for file sharing between the **Raspberry Pi (client)** and the **server**. The **client** will export video files, while the **server** will store them.
 
 ## NFS Server Setup (on the server machine)
 
