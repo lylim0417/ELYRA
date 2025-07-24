@@ -24,7 +24,7 @@ Additionally, **Region of Interest (ROI) segmentation** is used to focus the mod
 
 ## Setup Instructions
 
-For detailed instructions on setting up the AI and IoT components, please refer to [setup_instructions.md](docs/setup_instructions.md).
+For detailed instructions on setting up the AI and IoT components, please refer to [setup_instructions.md](docs/export_recording_setup_instructions.md).
 
 ## Acknowledgments
 
