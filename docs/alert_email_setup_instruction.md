@@ -11,9 +11,9 @@ This section explains how to set up the **email alert system** using **SMTP** an
 
 2. **Install Dependencies**
 
-   Install necessary libraries and packages:
+   Install necessary libraries and packages, please refer to [server_requirements.txt](../requirements/server_requirements.txt):
    ```bash
-   pip install -r requirements/server_requirements.txt
+   pip install -r server_requirements.txt
    ```
    
 2. **Create a Log File for Cron Job**
