@@ -7,7 +7,6 @@ import cv2
 import torch.cuda
 from ultralytics import YOLO
 import pandas as pd
-import pynvml
 import numpy as np
 import psutil
 
