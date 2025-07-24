@@ -111,8 +111,8 @@ First, make sure you have the export recording script [ELYRA_export_recording.py
 
 Create a log file to capture the output or errors of the Python script:
 ```bash
-touch /home/ELYRA-code/nfs_mount_logfile.log
-sudo chmod 755 /home/ELYRA-code/nfs_mount_logfile.log
+touch /home/ELYRA/ELYRA-code/nfs_mount_logfile.log
+sudo chmod 755 /home/ELYRA/ELYRA-code/nfs_mount_logfile.log
 ```
 
 ### 3. **Set Up a Cron Job to Run the Script Every 5 Minutes**
@@ -124,7 +124,7 @@ crontab -e
 
 Add the following line to schedule the script:
 ```bash
-*/5 * * * * /usr/bin/python3 /home/ELYRA-code/ELYRA_export_recording.py >> /home/ELYRA-code/nfs_mount_logfile.log 2>&1
+*/5 * * * * /usr/bin/python3 /home/ELYRA/ELYRA-code/ELYRA_export_recording.py >> /home/ELYRA/ELYRA-code/nfs_mount_logfile.log 2>&1
 ```
 
 ### 4. **Configure Log Rotation**
@@ -136,12 +136,12 @@ sudo nano /etc/logrotate.d/nfs_mount_logfile
 
 Add the following configuration to rotate logs daily and keep 7 days of logs:
 ```
-/home/ELYRA-code/nfs_mount_logfile.log {
+/home/ELYRA/ELYRA-code/nfs_mount_logfile.log {
     daily
     rotate 7
     compress
     notifempty
-    create 0640 user user
+    create 0640 {user} {user}
     sharedscripts
     postrotate
         systemctl reload rsyslog >/dev/null 2>&1 || true
