@@ -7,14 +7,14 @@ This section explains how to set up the **email alert system** using **SMTP** an
 
 1. **Ensure the Email Alert Script is in Place**
 
-   First, make sure you have the email alert script (`ELYRA_alert_email.py`) ready and placed on your **server** machine. This script will be responsible for sending email notifications when PPE violations are detected.
+   First, make sure you have the email alert script [ELYRA_alert_email.py](ELYRA-code/ELYRA_alert_email.py) ready and placed on your **server** machine. This script will be responsible for sending email notifications when PPE violations are detected.
 
 2. **Create a Log File for Cron Job**
 
    Create a log file where the output or errors of the script can be captured:
    ```bash
-   touch /home/lylim/AIoTCam/email_alert_logfile.log
-   sudo chmod 755 /home/lylim/AIoTCam/email_alert_logfile.log
+   touch /home/ELYRA-code/email_alert_logfile.log
+   sudo chmod 755 /home/ELYRA-code/email_alert_logfile.log
    ```
 
 3. **Set Up a Cron Job to Run the Script on **Server****
@@ -28,7 +28,7 @@ This section explains how to set up the **email alert system** using **SMTP** an
 
    - Add the following line to schedule the script. This will run the script every 5 minutes:
      ```bash
-     */5 * * * * /usr/bin/python3 /home/lylim/AIoTCam/ELYRA_alert_email.py >> /home/lylim/AIoTCam/email_alert_logfile.log 2>&1
+     */5 * * * * /usr/bin/python3 /home/ELYRA-code/ELYRA_alert_email.py >> /home/ELYRA-code/email_alert_logfile.log 2>&1
      ```
 
    **Explanation**:
@@ -46,7 +46,7 @@ This section explains how to set up the **email alert system** using **SMTP** an
 
    You should see the following line in the list:
    ```bash
-   */5 * * * * /usr/bin/python3 /home/lylim/AIoTCam/ELYRA_alert_email.py >> /home/lylim/AIoTCam/email_alert_logfile.log 2>&1
+   */5 * * * * /usr/bin/python3 /home/ELYRA-code/ELYRA_alert_email.py >> /home/ELYRA-code/email_alert_logfile.log 2>&1
    ```
 
 5. **Check the Log File**
@@ -63,10 +63,3 @@ This section explains how to set up the **email alert system** using **SMTP** an
 ## **Conclusion**
 
 By following these instructions, you will have successfully set up a cron job to automatically run the **`ELYRA_alert_email.py`** script on the **server**. This script will send email alerts when PPE violations are detected, ensuring real-time monitoring and notifications.
-
----
-
-### Instructions for Use:
-
-1. **Create the `Alert_Email_setup_instruction.md` file** in your GitHub repository.
-2. **Link it in your `README.md`** so users can easily access the full setup guide.
