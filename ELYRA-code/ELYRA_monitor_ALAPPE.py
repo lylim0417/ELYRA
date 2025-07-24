@@ -17,12 +17,10 @@ class AIoTCam:
         # Initialize the device (GPU if available, otherwise CPU)
         self.device = self.assign_device()
 
-        # Load YOLOv8 Pose model with ByteTrack support
-        #self.pose_model = self.load_yolo_model('Yolo-Weights/yolo11n-pose.pt')  # REPLACEMENT for person detection
+        # Load YOLOv11 Pose model with ByteTrack support
         self.pose_model = self.load_yolo_model('/home/lylim/AIoTCam/Yolo-Weights/yolo11n-pose_ncnn_model')  # REPLACEMENT for person detection
 
         # Load your custom detection model for compliance items
-        #self.custom_model = self.load_yolo_model('model-5000/5000-11s/weights/best.pt')
         self.custom_model = self.load_yolo_model('/home/lylim/AIoTCam/model-5000/5000-11s/weights/best_ncnn_model')
 
         # Class names for your custom model
@@ -36,10 +34,6 @@ class AIoTCam:
         self.capture = self.open_cam()
 
         # Frame size setup
-        '''self.frame_size = (1920, 1080)
-        self.screen = get_monitors()[0]
-        self.screen_width = self.screen.width
-        self.screen_height = self.screen.height'''
         self.frame_size = (int(get_monitors()[0].width / 2), get_monitors()[0].height)
         self.fps = 0
         self.frame_count = 1
@@ -74,10 +68,7 @@ class AIoTCam:
         self.person_inference_list = []
         self.person_postprocess_list = []
 
-        # GPU / CPU monitoring
-        '''self.gpu_handle = self.init_gpu_monitor()
-        self.gpu_util_list = []
-        self.mem_usage_list = []'''
+        # CPU monitoring
         self.cpu_percent_list = []
 
         # Detected item
@@ -143,11 +134,6 @@ class AIoTCam:
                             x1, y1, x2, y2 = box
                             person_tracker_list.append([x1, y1, x2, y2, int(track_id)])
 
-                            # Draw keypoints with confidence coloring
-                            '''for i, (x, y, conf) in enumerate(kps):
-                                color = (0, 255, 0) if conf > 0.3 else (0, 0, 255)
-                                cv2.circle(frame, (int(x), int(y)), 3, color, -1)'''
-
                 except Exception as e:
                     print(f"[WARN] Pose format error: {e}")
 
@@ -180,7 +166,6 @@ class AIoTCam:
                 x1 = max(0, min(width, int(x1)))
                 x2 = max(0, min(width, int(x2)))
                 person_roi = frame[y1:y2, x1:x2]
-                #person_roi = self.enhance_image_opencv(person_roi)
 
                 roi_result = self.custom_model(person_roi, conf=0.8, device=self.device)
                 person_roi_item_result_single = roi_result[0]
@@ -244,14 +229,11 @@ class AIoTCam:
             self.item_inference_list.append(avg_inf)
             self.item_postprocess_list.append(avg_post)
 
-            # -------- FPS + GPU / CPU --------
+            # -------- FPS + CPU --------
             end_time = time.time()
             self.fps = self.calculate_fps(start_time, end_time)
             self.fps_list.append(self.fps)
             self.draw_fps(frame, self.fps)
-            '''gpu_util, mem_usage = self.get_gpu_info(self.gpu_handle)
-            self.gpu_util_list.append(gpu_util)
-            self.mem_usage_list.append(mem_usage)'''
             cpu_percent = psutil.cpu_percent(interval=None)
             self.cpu_percent_list.append(cpu_percent)
 
@@ -872,19 +854,6 @@ class AIoTCam:
             return 0.00
         avg = sum(inference_list) / len(inference_list)
         return avg
-
-    @staticmethod
-    def init_gpu_monitor():
-        pynvml.nvmlInit()
-        handle = pynvml.nvmlDeviceGetHandleByIndex(0)  # usually GPU 0
-        return handle
-
-    @staticmethod
-    def get_gpu_info(handle):
-        util = pynvml.nvmlDeviceGetUtilizationRates(handle)
-        mem = pynvml.nvmlDeviceGetMemoryInfo(handle)
-        return util.gpu, mem.used / 1024 ** 2  # GPU%, Memory MB
-
     
     @staticmethod
     def draw_dynamic_label_box(frame, bbox, text, border_color=(255, 0, 0), text_color=(255, 255, 255), thickness=3):
@@ -903,8 +872,6 @@ class AIoTCam:
         # Calculate text size and background dimensions
         (text_width, text_height), baseline = cv2.getTextSize(text, fontFace=cv2.FONT_HERSHEY_COMPLEX_SMALL,
                                                               fontScale=0.8, thickness=1)
-        '''(text_width, text_height), baseline = cv2.getTextSize(text, fontFace=cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                                                              fontScale=2.25, thickness=3)'''
 
         text_x1 = max(0, x1)
         text_y1 = max(0, y1 - text_height - baseline)
@@ -913,7 +880,6 @@ class AIoTCam:
 
         # Draw bounding box
         cv2.rectangle(frame, (x1, y1), (x2, y2), color=border_color, thickness=thickness)
-        '''cv2.rectangle(frame, (x1, y1), (x2, y2), color=border_color, thickness=5)'''
 
         # Draw label background rectangle
         cv2.rectangle(frame, (text_x1, text_y1), (text_x2, text_y2), color=border_color, thickness=-1)
@@ -921,183 +887,7 @@ class AIoTCam:
         # Draw label text
         cv2.putText(frame, text, (text_x1, text_y2 - baseline), fontFace=cv2.FONT_HERSHEY_COMPLEX_SMALL,
                     color=text_color, fontScale=0.75, thickness=1, lineType=cv2.LINE_AA)
-        '''cv2.putText(frame, text, (text_x1, text_y2 - baseline), fontFace=cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                    color=text_color, fontScale=2, thickness=3, lineType=cv2.LINE_AA)'''
-
-    def run_on_image(self, image_path, show_result=True, save_path=None):
-        """
-        Run detection and tracking on a single image and display/save the result.
-
-        Args:
-            image_path (str): Path to the input image.
-            show_result (bool): Whether to display the output image.
-            save_path (str or None): If provided, save the result to this path.
-        """
-        if not os.path.exists(image_path):
-            print(f"[ERROR] Image not found: {image_path}")
-            return
-
-        # Read and resize the input image
-        frame = cv2.imread(image_path)
-        #frame = self.resize_frame(frame, self.frame_size)
-
-        # Pose + tracking
-        pose_result = self.pose_model.track(
-            source=frame,
-            persist=True,
-            conf=0.5,
-            tracker="bytetrack.yaml",
-            device=self.device
-        )
-        pose_frame = pose_result[0]
-
-        person_tracker_list = []
-
-        if (pose_frame.boxes is not None and len(pose_frame.boxes) > 0
-                and pose_frame.boxes.id is not None and pose_frame.keypoints is not None):
-            try:
-                for box, track_id, kps in zip(
-                        pose_frame.boxes.xyxy.cpu().numpy(),
-                        pose_frame.boxes.id.int().cpu().numpy(),
-                        pose_frame.keypoints.xy.cpu().numpy()):
-
-                    if self.is_full_body(kps):
-                        x1, y1, x2, y2 = box
-                        person_tracker_list.append([x1, y1, x2, y2, int(track_id)])
-
-            except Exception as e:
-                print(f"[WARN] Pose format error: {e}")
-
-        person_roi_item_result = {}
-
-        for person_data in person_tracker_list:
-            x1, y1, x2, y2, track_id = person_data
-            height, width = frame.shape[:2]
-            y1 = max(0, min(height, int(y1)))
-            y2 = max(0, min(height, int(y2)))
-            x1 = max(0, min(width, int(x1)))
-            x2 = max(0, min(width, int(x2)))
-            person_roi = frame[y1:y2, x1:x2]
-            person_roi = self.enhance_image_opencv(person_roi)
-
-            roi_result = self.custom_model(person_roi, conf=0.5, device=self.device)
-            person_roi_item_result_single = roi_result[0]
-            roi_item_detector_list = self.process_detect_results(person_roi_item_result_single)
-
-            roi_item_detector_list_cleaned = [{'bbox': item[:4], 'conf': item[4], 'class_id': item[-1]} for item in roi_item_detector_list]
-            person_roi_item_result[track_id] = roi_item_detector_list_cleaned
-
-        self.draw_detections(frame, person_tracker_list, person_roi_item_result, self.compliance_class)
-
-        if show_result:
-            cv2.imshow("AIoTCam Image Result", frame)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
-
-        if save_path:
-            cv2.imwrite(save_path, frame)
-
-    @staticmethod
-    def correct_orientation(frame):
-        # Rotate 90 degrees clockwise
-        return cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
-
-    def run_on_video(self, video_path, show_result=True, save_path=None):
-        """
-        Run detection and tracking on a video file.
-
-        Args:
-            video_path (str): Path to the input video.
-            show_result (bool): Whether to display the output video.
-            save_path (str or None): If provided, save the output video to this path.
-        """
-        if not os.path.exists(video_path):
-            print(f"[ERROR] Video not found: {video_path}")
-            return
-
-        cap = cv2.VideoCapture(video_path)
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        fps = cap.get(cv2.CAP_PROP_FPS)
-
-        if save_path:
-            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-            out = cv2.VideoWriter(save_path, fourcc, 30, (width, height))
-        else:
-            out = None
-
-        while cap.isOpened():
-            ret, frame = cap.read()
-            #frame = self.correct_orientation(frame)
-            if not ret:
-                break
-
-            # Pose + tracking
-            pose_result = self.pose_model.track(
-                source=frame,
-                persist=True,
-                conf=0.5,
-                tracker="bytetrack.yaml",
-                device=self.device
-            )
-            pose_frame = pose_result[0]
-
-            person_tracker_list = []
-            if (pose_frame.boxes is not None and len(pose_frame.boxes) > 0
-                    and pose_frame.boxes.id is not None and pose_frame.keypoints is not None):
-                try:
-                    for box, track_id, kps in zip(
-                            pose_frame.boxes.xyxy.cpu().numpy(),
-                            pose_frame.boxes.id.int().cpu().numpy(),
-                            pose_frame.keypoints.xy.cpu().numpy()):
-
-                        if self.is_full_body(kps):
-                            x1, y1, x2, y2 = box
-                            person_tracker_list.append([x1, y1, x2, y2, int(track_id)])
-                except Exception as e:
-                    print(f"[WARN] Pose format error: {e}")
-
-            person_roi_item_result = {}
-            for person_data in person_tracker_list:
-                x1, y1, x2, y2, track_id = person_data
-                h, w = frame.shape[:2]
-                y1 = max(0, min(h, int(y1)))
-                y2 = max(0, min(h, int(y2)))
-                x1 = max(0, min(w, int(x1)))
-                x2 = max(0, min(w, int(x2)))
-                roi = frame[y1:y2, x1:x2]
-                roi = self.enhance_image_opencv(roi)
-
-                roi_result = self.custom_model(roi, conf=0.5, device=self.device, classes=[0, 1, 3, 4])
-                person_roi_item_result_single = roi_result[0]
-                detector_list = self.process_detect_results(person_roi_item_result_single)
-
-                roi_item_detector_list_cleaned = [{'bbox': item[:4], 'conf': item[4], 'class_id': item[-1]} for item in roi_item_detector_list]
-                person_roi_item_result[track_id] = roi_item_detector_list_cleaned
-
-            self.draw_detections(frame, person_tracker_list, person_roi_item_result, self.compliance_class)
-
-            if show_result:
-                cv2.imshow("AIoTCam Video Result", frame)
-                if cv2.waitKey(1) & 0xFF == 27:  # ESC key
-                    break
-
-            if out:
-                out.write(frame)
-
-        cap.release()
-        if out:
-            out.release()
-        cv2.destroyAllWindows()
-
 
 
 if __name__ == '__main__':
     AIoTCam().main()
-    '''test_image_path = r"D:\PycharmProjects\AIoTCam\AIoTCam\test_images\ly_with_kimi.jpg"
-    output_path = r"D:\PycharmProjects\AIoTCam\AIoTCam\test_images\ly_with_kimi_11ss_shoes.jpg"
-    AIoTCam().run_on_image(test_image_path, show_result=True, save_path=output_path)'''
-    '''cam = AIoTCam()
-    input_video = r"D:\PycharmProjects\AIoTCam\AIoTCam\test_images\compliance.mp4"
-    output_video = r"D:\PycharmProjects\AIoTCam\AIoTCam\test_images\compliance_output_n.mp4"
-    cam.run_on_video(input_video, show_result=True, save_path=output_video)'''
