@@ -12,7 +12,7 @@ import numpy as np
 import psutil
 
 
-class AIoTCam:
+class ELYRA:
     def __init__(self):
         # Initialize the device (GPU if available, otherwise CPU)
         self.device = self.assign_device()
@@ -890,4 +890,4 @@ class AIoTCam:
 
 
 if __name__ == '__main__':
-    AIoTCam().main()
+    ELYRA().main()
