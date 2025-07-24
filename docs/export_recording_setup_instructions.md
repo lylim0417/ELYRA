@@ -136,12 +136,12 @@ sudo nano /etc/logrotate.d/nfs_mount_logfile
 
 Add the following configuration to rotate logs daily and keep 7 days of logs:
 ```
-/home/lylim/AIoTCam/nfs_mount_logfile.log {
+/home/ELYRA-code/nfs_mount_logfile.log {
     daily
     rotate 7
     compress
     notifempty
-    create 0640 lylim lylim
+    create 0640 user user
     sharedscripts
     postrotate
         systemctl reload rsyslog >/dev/null 2>&1 || true
