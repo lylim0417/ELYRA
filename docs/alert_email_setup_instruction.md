@@ -20,8 +20,8 @@ This section explains how to set up the **email alert system** using **SMTP** an
 
    Create a log file where the output or errors of the script can be captured:
    ```bash
-   touch /home/ELYRA-code/email_alert_logfile.log
-   sudo chmod 755 /home/ELYRA-code/email_alert_logfile.log
+   touch /home/ELYRA/ELYRA-code/email_alert_logfile.log
+   sudo chmod 755 /home/ELYRA/ELYRA-code/email_alert_logfile.log
    ```
 
 3. **Set Up a Cron Job to Run the Script on **Server****
@@ -35,13 +35,13 @@ This section explains how to set up the **email alert system** using **SMTP** an
 
    - Add the following line to schedule the script. This will run the script every 5 minutes:
      ```bash
-     */5 * * * * /usr/bin/python3 /home/ELYRA-code/ELYRA_alert_email.py >> /home/ELYRA-code/email_alert_logfile.log 2>&1
+     */5 * * * * /usr/bin/python3 /home/ELYRA/ELYRA-code/ELYRA_alert_email.py >> /home/ELYRA/ELYRA-code/email_alert_logfile.log 2>&1
      ```
 
    **Explanation**:
    - `*/5 * * * *` tells cron to run the script every 5 minutes.
    - `/usr/bin/python3` is the Python interpreter. Make sure to replace it with the correct path if needed.
-   - `/home/lylim/AIoTCam/ELYRA_alert_email.py` is the path to the alert email script on the **server**.
+   - `/home/ELYRA/ELYRA-code/ELYRA_alert_email.py` is the path to the alert email script on the **server**.
    - The output and errors will be logged to **`email_alert_logfile.log`**.
 
 4. **Verify the Cron Job**
@@ -53,14 +53,14 @@ This section explains how to set up the **email alert system** using **SMTP** an
 
    You should see the following line in the list:
    ```bash
-   */5 * * * * /usr/bin/python3 /home/ELYRA-code/ELYRA_alert_email.py >> /home/ELYRA-code/email_alert_logfile.log 2>&1
+   */5 * * * * /usr/bin/python3 /home/ELYRA/ELYRA-code/ELYRA_alert_email.py >> /home/ELYRA/ELYRA-code/email_alert_logfile.log 2>&1
    ```
 
 5. **Check the Log File**
 
    After the cron job runs, check the log file for any output or errors:
    ```bash
-   cat /home/lylim/AIoTCam/email_alert_logfile.log
+   cat /home/ELYRA/ELYRA-code/email_alert_logfile.log
    ```
 
    This will help you confirm that the script is running as expected and sending email alerts.
