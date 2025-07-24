@@ -22,3 +22,11 @@ Additionally, **Region of Interest (ROI) segmentation** is used to focus the mod
 - **`ELYRA_export_recording.py`**: Exports recorded compliance data for analysis, utilizing **NFS** for centralized storage and easy access to the logged data across multiple devices.
 - **`ELYRA_alert_email.py`**: Sends email alerts when PPE violations are detected, using **SMTP** for email delivery and **MIME** for formatting the email content with attachments.
 
+## Setup Instructions
+
+For detailed instructions on setting up the AI and IoT components, please refer to [setup_instructions.md](docs/setup_instructions.md).
+
+## Acknowledgments
+
+- Thanks to **Mr. Herrick** for guidance and **Ms. Jiehan** for initial model training ideas.
+- Special thanks to **Prof. Yap** for supervision and **Mr. Tay** for insights on PPE compliance in lab environments.
