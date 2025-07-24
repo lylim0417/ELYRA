@@ -24,7 +24,10 @@ Additionally, **Region of Interest (ROI) segmentation** is used to focus the mod
 
 ## Setup Instructions
 
-For detailed instructions on setting up the AI and IoT components, please refer to [setup_instructions.md](docs/export_recording_setup_instructions.md).
+For detailed instructions on setting up the following components, please refer to the corresponding setup instructions:
+- [AI and IoT components](docs/setup_instructions.md)
+- [Alert Email setup](docs/alert_email_setup_instruction.md)
+- [Export Recording setup](docs/export_recording_setup_instruction.md)
 
 ## Acknowledgments
 
