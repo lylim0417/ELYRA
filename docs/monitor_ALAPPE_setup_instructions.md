@@ -1,49 +1,27 @@
 
-# ELYRA System - AIoTCam Setup Instructions
+# Monitor ALA PPE Setup Instructions for ELYRA System
 
-This guide outlines the steps to set up the **AIoTCam** system, including the required dependencies and setup for video processing, object detection using YOLO, and system monitoring.
+This section explains how to set up the ALA PPE compliance monitoring system using YOLO11, Pose Tracking, ByteTrack, ROI Segmentation, and NCNN Optimization. The monitoring script runs on the client side and detects ALA PPE compliance and records it down.
 
-## Prerequisites
+## Setting Up the Cron Job for Monitor ALA PPE (on **client**)
 
-### 1. **Create a Project Directory**:
-   First, create a directory for the project named `ELYRA-code`:
+1. **Ensure the Monitor ALA PPE Script is in Place**:
+   First, make sure you have the Monitor ALA PPE script [ELYRA_monitor_ALAPPE.py](../ELYRA-code/ELYRA_monitor_ALAPPE.py) ready and placed on your **client** machine. This script will be responsible for detecting compliance items such as shirts, pants, and shoes, using YOLO11.
+
+2. **Install Dependencies**
+
+   Install necessary libraries and packages, please refer to [client_requirements.txt](../requirements/client_requirements.txt):
    ```bash
-   mkdir ELYRA-code
+   pip install -r client_requirements.txt
    ```
 
-   Then, grant full permissions to the directory:
-   ```bash
-   sudo chmod 777 ELYRA-code
-   ```
+3. **Configure the YOLO1 Model**
+   The system uses a **YOLO11 model** for object detection. Please refer to [ELYRA-model/](../ELYRA-model/).
 
-### 2. **Install Required Python Packages**
+   - **Custom ALA PPE Model (YOLO11s + NCNN)**: [ELYRA-model/Custom_ALAPPE_Detection-YOLO11s/best_ncnn_model](../ELYRA-model/Custom_ALAPPE_Detection-YOLO11s/best_ncnn_model)
+   - **Pose Detection Model (YOLO11n + NCNN)**: [ELYRA-model/Default_Person_Pose_Estimation-YOLO11n/yolo11n-pose_ncnn_model](../ELYRA-model/Default_Person_Pose_Estimation-YOLO11n/yolo11n-pose_ncnn_model)
 
-   To install the necessary dependencies, you can use the provided **`requirements.txt`** file.
-
-   1. Create the `requirements.txt` file with the following content:
-      ```plaintext
-      ultralytics         # For YOLOv5 and other YOLO models
-      opencv-python       # For video processing with OpenCV
-      screeninfo          # For retrieving monitor information
-      torch               # For running the YOLO model, support for GPU/CPU
-      psutil              # For system monitoring (CPU, memory, etc.)
-      pynvml              # For monitoring NVIDIA GPU status
-      pandas              # For handling data frames
-      numpy               # For numerical operations
-      ```
-
-   2. Install the dependencies using pip:
-      ```bash
-      pip install -r requirements.txt
-      ```
-
-### 3. **Configure the YOLOv5 Model**
-   The system uses a **YOLOv5 model** for object detection. You should already have the model weights available, or you can download the pre-trained model.
-
-   - **Custom YOLO Model**: `/home/lylim/AIoTCam/model-5000/5000-11s/weights/best_ncnn_model`
-   - **Pose Detection Model**: `/home/lylim/AIoTCam/Yolo-Weights/yolo11n-pose_ncnn_model`
-
-### 4. **Check GPU Support (Optional)**
+4. **Check GPU Support (Optional)**
 
    The system can utilize a **GPU** if available for faster inference. To check for GPU support:
    - Ensure that **CUDA** is installed if you're using an NVIDIA GPU.
@@ -54,22 +32,22 @@ This guide outlines the steps to set up the **AIoTCam** system, including the re
 
    - If no GPU is available, the system will fall back to the **CPU**.
 
-### 5. **Camera Configuration**
+5. **Camera Configuration**
    Ensure that your camera is properly connected to the system and accessible via OpenCV. The script uses OpenCV to access the camera:
    ```python
    capture = cv2.VideoCapture(0)
    ```
 
-### 6. **Running the Script**
+6. **Running the Script**
 
-   After completing the setup, you can run the **`AIoTCam`** system script to start processing video frames, detect people and non-compliance items, and record the output:
+   After completing the setup, you can run the **`ELYRA_monitor_ALAPPE`** system script to start processing video frames, detect people and non-compliance items, and record the output:
    ```bash
-   python3 AIoTCam.py
+   python3 ELYRA_monitor_ALAPPE.py
    ```
 
-   The system will use the **YOLOv5 model** for detecting compliance items (e.g., shirts, pants, shoes) and track them.
+   The system will use the **YOLO11 model** with the integration of **ROI Segmentation** and **NCNN Optimization** for detecting compliance items (e.g., shirts, pants, shoes) and track them.
 
-### 7. **Monitoring and Logging**
+7. **Monitoring and Logging**
 
    The system collects various performance metrics during processing:
    - **FPS (Frames per Second)**
@@ -77,7 +55,7 @@ This guide outlines the steps to set up the **AIoTCam** system, including the re
    - **Detected items** (compliance vs. non-compliance)
    - The results are saved to CSV logs for further analysis.
 
-### 8. **Start Recording**
+8. **Start Recording**
 
    The system can also record video for detected persons, especially if they are found to be in non-compliance with PPE requirements.
 
@@ -96,10 +74,10 @@ To ensure the script runs automatically on system startup, follow these steps:
 2. **Add the `@reboot` Line**:
    Add the following line to the crontab to automatically run the script on boot:
    ```bash
-   @reboot /usr/bin/python3 /home/lylim/AIoTCam/AIoTCam.py >> /home/lylim/AIoTCam/aiotcam_logfile.log 2>&1
+   @reboot /usr/bin/python3 /home/ELYRA/ELYRA-code/ELYRA_monitor_ALAPPE.py >> /home/ELYRA/ELYRA-code/ELYRA_monitor_ALAPPE_logfile.log 2>&1
    ```
 
-   This line ensures that the **`AIoTCam.py`** script will start automatically after reboot, and all output (including errors) will be logged to **`aiotcam_logfile.log`**.
+   This line ensures that the **`ELYRA_monitor_ALAPPE.py`** script will start automatically after reboot, and all output (including errors) will be logged to **`ELYRA_monitor_ALAPPE.log`**.
 
 3. **Verify Crontab**:
    To confirm that the crontab entry has been added correctly, list your crontab jobs:
@@ -109,13 +87,13 @@ To ensure the script runs automatically on system startup, follow these steps:
 
    You should see the following line in the list:
    ```bash
-   @reboot /usr/bin/python3 /home/lylim/AIoTCam/AIoTCam.py >> /home/lylim/AIoTCam/aiotcam_logfile.log 2>&1
+   @reboot /usr/bin/python3 /home/ELYRA/ELYRA-code/ELYRA_monitor_ALAPPE.py >> /home/ELYRA/ELYRA-code/ELYRA_monitor_ALAPPE_logfile.log 2>&1
    ```
 
 4. **Check the Log File**:
    After a reboot, check the log file for any output or errors:
    ```bash
-   cat /home/lylim/AIoTCam/aiotcam_logfile.log
+   cat /home/ELYRA/ELYRA-code/ELYRA_monitor_ALAPPE_logfile.log
    ```
 
 ---
@@ -124,7 +102,7 @@ To ensure the script runs automatically on system startup, follow these steps:
 
 - **OpenCV** requires that you have a proper installation of dependencies for handling video capture and processing.
 - **Ultralytics YOLO** (used in this project) is a state-of-the-art object detection model, and you will need **PyTorch** for running the model.
-- Ensure that **CUDA** is installed for NVIDIA GPU support, which will drastically improve inference speed.
+- Ensure that **CUDA** is installed for NVIDIA GPU support, which will drastically improve inference speed. **(No difference in Raspberry Pi)**
 
 ---
 
@@ -140,12 +118,10 @@ To ensure the script runs automatically on system startup, follow these steps:
        print("Camera is working.")
    ```
 
-- **Out of Memory (OOM) error**: If you are running the script on a machine with limited GPU memory, try reducing the image resolution or batch size in the YOLO model configuration.
+- **Out of Memory (OOM) error**: If you are running the script on a machine with limited CPU memory, try reducing the image resolution or batch size in the YOLO model configuration.
 
 ---
 
 ## Conclusion
 
-By following these setup instructions, you should be able to run the **AIoTCam** system, utilizing YOLO for object detection and real-time compliance monitoring with video recording and alerting capabilities.
-
-Let me know if you encounter any issues or need additional support!
+By following these setup instructions, you should be able to run the **ELYRA_monitro_ALAPPE** system, utilizing YOLO for object detection and real-time compliance monitoring and recording.
