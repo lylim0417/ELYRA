@@ -10,10 +10,10 @@ from email.mime.application import MIMEApplication
 BASE_PATH = "/mnt/nfs/recordings/"
 TODAY = datetime.now().strftime("%Y-%m-%d")
 TODAY_FOLDER = os.path.join(BASE_PATH, TODAY)
-CACHE_FILE = f"/home/lylim/AIoTCam/notified_{TODAY}.txt"
-EMAIL_SENDER = "lylim0371@gmail.com"
+CACHE_FILE = f"/home/ELYRA-code/notified_{TODAY}.txt"
+EMAIL_SENDER = "{sender}@gmail.com"
 EMAIL_PASSWORD = "---"  # Use Gmail App Password
-EMAIL_RECEIVER = "tayjunshengmauduit@gmail.com"
+EMAIL_RECEIVER = "{receiver}@gmail.com"
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
 EMAIL_SUBJECT = f"🎥 New Lab Recording Detected {TODAY}"
