@@ -105,7 +105,7 @@ To automate the process of managing video files, you will write a Python script 
 
 ### 1. **Write Python Script to Automate File Upload**
 
-Create a Python script `ELYRA-code/ELYRA_export_recording.py` to automate file management between the Raspberry Pi and the NFS server.
+Create a Python script [ELYRA_export_recording.py](ELYRA-code/ELYRA_export_recording.py) to automate file management between the Raspberry Pi and the NFS server.
 
 ### 2. **Create a Log File**
 
