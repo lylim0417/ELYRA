@@ -14,7 +14,7 @@ Additionally, **Region of Interest (ROI) segmentation** is used to focus the mod
 - **Edge computing**: Processes data locally on a Raspberry Pi to minimize latency and avoid cloud dependency.
 - **Email alerts**: Sends notifications when non-compliance is detected.
 - **Custom YOLO model**: Optimized for real-time processing with NCNN.
-- **ROI Segmentation**: Focuses AI detection on specific regions of interest (such as the torso, legs, and feet), improving accuracy and efficiency.
+- **ROI Segmentation**: Focuses AI detection on specific regions of interest (person), improving accuracy and efficiency.
 
 ## Components
 
